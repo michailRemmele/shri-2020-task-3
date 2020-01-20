@@ -121,7 +121,6 @@ const openPreview = (context: vscode.ExtensionContext) => {
 };
 
 export function activate(context: vscode.ExtensionContext) {
-
     console.info('Congratulations, your extension is now active!');
 
     client = createLanguageClient(context);

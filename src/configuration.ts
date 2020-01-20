@@ -17,8 +17,6 @@ export interface SeverityConfiguration {
 }
 
 export interface ExampleConfiguration {
- 
     enable: boolean;
- 
     severity: SeverityConfiguration;
 }

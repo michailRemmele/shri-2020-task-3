@@ -11,7 +11,7 @@ import {
 
 import { basename } from 'path';
 
-import * as jsonToAst from "json-to-ast";
+import * as jsonToAst from 'json-to-ast';
 
 import { ExampleConfiguration, Severity, RuleKeys } from './configuration';
 import { makeLint, LinterProblem } from './linter';
@@ -23,7 +23,7 @@ let conf: ExampleConfiguration | undefined = undefined;
 conn.onInitialize((params: InitializeParams) => {
     return {
         capabilities: {
-            textDocumentSync: 'always'
+            textDocumentSync: docs.syncKind
         }
     };
 });
