@@ -50,7 +50,7 @@ const getPreviewKey = (doc: vscode.TextDocument): string => doc.uri.path;
 
 const getMediaPath = (context: vscode.ExtensionContext) => vscode.Uri
     .file(context.extensionPath)
-    .with({ scheme: "resource"})
+    .with({ scheme: "vscode-resource"})
     .toString() + '/';
 
 const initPreviewPanel = (document: vscode.TextDocument) => {
@@ -87,7 +87,7 @@ const updateContent = (doc: vscode.TextDocument, context: vscode.ExtensionContex
             const html = template.apply(data);
 
             panel.webview.html = previewHtml 
-                .replace(/{{\s+(\w+)\s+}}/g, (str, key) => {
+                .replace(/{{\s*(\w+)\s*}}/g, (str, key) => {
                     switch (key) {
                         case 'content':
                             return html;
