@@ -10,10 +10,9 @@ import {
 
 import { basename } from 'path';
 
-import * as jsonToAst from 'json-to-ast';
+import { ExampleConfiguration, Severity, RuleKeys, RuleGroups } from './configuration';
 
-import { ExampleConfiguration, Severity, RuleKeys } from './configuration';
-import { makeLint, LinterProblem } from './linter';
+require('./linter');
 
 let conn = createConnection(ProposedFeatures.all);
 let docs = new TextDocuments();
@@ -27,12 +26,15 @@ conn.onInitialize(() => {
     };
 });
 
-function GetSeverity(key: RuleKeys): DiagnosticSeverity | undefined {
+function GetSeverity(code: string): DiagnosticSeverity | undefined {
     if (!conf || !conf.severity) {
         return undefined;
     }
 
-    const severity: Severity = conf.severity[key];
+    const splitCode = code.split('.');
+    const group: RuleGroups = splitCode[0] as RuleGroups;
+    const key: RuleKeys = splitCode[1] as RuleKeys;
+    const severity: Severity = conf.severity[group][key];
 
     switch (severity) {
         case Severity.Error:
@@ -48,61 +50,33 @@ function GetSeverity(key: RuleKeys): DiagnosticSeverity | undefined {
     }
 }
 
-function GetMessage(key: RuleKeys): string {
-    if (key === RuleKeys.BlockNameIsRequired) {
-        return 'Field named \'block\' is required!';
-    }
-
-    if (key === RuleKeys.UppercaseNamesIsForbidden) {
-        return 'Uppercase properties are forbidden!';
-    }
-
-    return `Unknown problem type '${key}'`;
-}
-
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     const source = basename(textDocument.uri);
     const json = textDocument.getText();
 
-    const validateObject = (
-        obj: jsonToAst.AstObject
-    ): LinterProblem<RuleKeys>[] =>
-        obj.children.some(p => p.key.value === 'block')
-            ? []
-            : [{ key: RuleKeys.BlockNameIsRequired, loc: obj.loc }];
-
-    const validateProperty = (
-        property: jsonToAst.AstProperty
-    ): LinterProblem<RuleKeys>[] =>
-        /^[A-Z]+$/.test(property.key.value)
-            ? [
-                  {
-                      key: RuleKeys.UppercaseNamesIsForbidden,
-                      loc: property.key.loc
-                  }
-              ]
-            : [];
-
-    const diagnostics: Diagnostic[] = makeLint(
+    const diagnostics: Diagnostic[] = lint(
         json,
-        validateProperty,
-        validateObject
     ).reduce(
         (
             list: Diagnostic[],
-            problem: LinterProblem<RuleKeys>
+            problem
         ): Diagnostic[] => {
-            const severity = GetSeverity(problem.key);
+            const severity = GetSeverity(problem.code);
 
             if (severity) {
-                const message = GetMessage(problem.key);
+                const message = problem.error;
+                const { start, end } = problem.location;
 
                 let diagnostic: Diagnostic = {
                     range: {
-                        start: textDocument.positionAt(
-                            problem.loc.start.offset
-                        ),
-                        end: textDocument.positionAt(problem.loc.end.offset)
+                        start: {
+                            line: start.line,
+                            character: start.column
+                        },
+                        end: {
+                            line: end.line,
+                            character: end.column
+                        }
                     },
                     severity,
                     message,
