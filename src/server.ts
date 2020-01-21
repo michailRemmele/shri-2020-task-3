@@ -2,7 +2,6 @@ import {
     createConnection,
     ProposedFeatures,
     TextDocuments,
-    InitializeParams,
     TextDocument,
     Diagnostic,
     DiagnosticSeverity,

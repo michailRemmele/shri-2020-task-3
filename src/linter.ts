@@ -1,4 +1,4 @@
-import * as jsonToAst from "json-to-ast";
+import * as jsonToAst from 'json-to-ast';
 
 export type JsonAST = jsonToAst.AstJsonEntity | undefined;
 

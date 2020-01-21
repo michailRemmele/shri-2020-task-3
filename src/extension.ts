@@ -1,6 +1,6 @@
-import { readFileSync } from "fs";
-import { join, resolve, basename } from "path";
-import { bemhtml } from "bem-xjst";
+import { readFileSync } from 'fs';
+import { join, resolve, basename } from 'path';
+import { bemhtml } from 'bem-xjst';
 
 import * as vscode from 'vscode';
 import {
@@ -50,7 +50,7 @@ const getPreviewKey = (doc: vscode.TextDocument): string => doc.uri.path;
 
 const getMediaPath = (context: vscode.ExtensionContext) => vscode.Uri
     .file(context.extensionPath)
-    .with({ scheme: "vscode-resource"})
+    .with({ scheme: 'vscode-resource'})
     .toString() + '/';
 
 const initPreviewPanel = (document: vscode.TextDocument) => {
