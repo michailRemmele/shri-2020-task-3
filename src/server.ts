@@ -5,7 +5,8 @@ import {
     TextDocument,
     Diagnostic,
     DiagnosticSeverity,
-    DidChangeConfigurationParams
+    DidChangeConfigurationParams,
+    Position
 } from 'vscode-languageserver';
 
 import { basename } from 'path';
@@ -54,12 +55,19 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     const source = basename(textDocument.uri);
     const json = textDocument.getText();
 
+    const toPosition = (point: Linter.ProblemLocationPoint): Position => {
+        return {
+            line: point.line - 1,
+            character: point.column - 1
+        };
+    };
+
     const diagnostics: Diagnostic[] = lint(
         json,
     ).reduce(
         (
             list: Diagnostic[],
-            problem
+            problem: Linter.LinterProblem,
         ): Diagnostic[] => {
             const severity = GetSeverity(problem.code);
 
@@ -69,14 +77,8 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
                 let diagnostic: Diagnostic = {
                     range: {
-                        start: {
-                            line: start.line,
-                            character: start.column
-                        },
-                        end: {
-                            line: end.line,
-                            character: end.column
-                        }
+                        start: toPosition(start),
+                        end: toPosition(end)
                     },
                     severity,
                     message,
