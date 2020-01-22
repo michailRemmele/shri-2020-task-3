@@ -1,18 +1,12 @@
-export enum RuleGroups {
-    Warning = 'WARNING',
-    Text = 'TEXT',
-    Grid = 'GRID',
-}
-
 export enum RuleKeys {
-    TextSizesShouldBeEqual = 'TEXT_SIZES_SHOULD_BE_EQUAL',
-    InvalidButtonSize = 'INVALID_BUTTON_SIZE',
-    InvalidButtonPosition = 'INVALID_BUTTON_POSITION',
-    InvalidPlaceholderSize = 'INVALID_PLACEHOLDER_SIZE',
-    SeveralH1 = 'SEVERAL_H1',
-    InvalidH2Position = 'INVALID_H2_POSITION',
-    InvalidH3Position = 'INVALID_H3_POSITION',
-    TooMuchMarketingBlocks = 'TOO_MUCH_MARKETING_BLOCKS',
+    WarningTextSizesShouldBeEqual = 'warningTextSizesShouldBeEqual',
+    WarningInvalidButtonSize = 'warningInvalidButtonSize',
+    WarningInvalidButtonPosition = 'warningInvalidButtonPosition',
+    WarningInvalidPlaceholderSize = 'warningInvalidPlaceholderSize',
+    TextSeveralH1 = 'textSeveralH1',
+    TextInvalidH2Position = 'textInvalidH2Position',
+    TextInvalidH3Position = 'textInvalidH3Position',
+    GridTooMuchMarketingBlocks = 'gridTooMuchMarketingBlocks',
 }
 
 export enum Severity {
@@ -24,36 +18,14 @@ export enum Severity {
 }
 
 export interface SeverityConfiguration {
-    [RuleGroups.Warning]: {
-        [RuleKeys.TextSizesShouldBeEqual]: Severity;
-        [RuleKeys.InvalidButtonSize]: Severity;
-        [RuleKeys.InvalidButtonPosition]: Severity;
-        [RuleKeys.InvalidPlaceholderSize]: Severity;
-        [RuleKeys.SeveralH1]: Severity;
-        [RuleKeys.InvalidH2Position]: Severity;
-        [RuleKeys.InvalidH3Position]: Severity;
-        [RuleKeys.TooMuchMarketingBlocks]: Severity;
-    };
-    [RuleGroups.Text]: {
-        [RuleKeys.TextSizesShouldBeEqual]: Severity;
-        [RuleKeys.InvalidButtonSize]: Severity;
-        [RuleKeys.InvalidButtonPosition]: Severity;
-        [RuleKeys.InvalidPlaceholderSize]: Severity;
-        [RuleKeys.SeveralH1]: Severity;
-        [RuleKeys.InvalidH2Position]: Severity;
-        [RuleKeys.InvalidH3Position]: Severity;
-        [RuleKeys.TooMuchMarketingBlocks]: Severity;
-    };
-    [RuleGroups.Grid]: {
-        [RuleKeys.TextSizesShouldBeEqual]: Severity;
-        [RuleKeys.InvalidButtonSize]: Severity;
-        [RuleKeys.InvalidButtonPosition]: Severity;
-        [RuleKeys.InvalidPlaceholderSize]: Severity;
-        [RuleKeys.SeveralH1]: Severity;
-        [RuleKeys.InvalidH2Position]: Severity;
-        [RuleKeys.InvalidH3Position]: Severity;
-        [RuleKeys.TooMuchMarketingBlocks]: Severity;
-    };
+    [RuleKeys.WarningTextSizesShouldBeEqual]: Severity;
+    [RuleKeys.WarningInvalidButtonSize]: Severity;
+    [RuleKeys.WarningInvalidButtonPosition]: Severity;
+    [RuleKeys.WarningInvalidPlaceholderSize]: Severity;
+    [RuleKeys.TextSeveralH1]: Severity;
+    [RuleKeys.TextInvalidH2Position]: Severity;
+    [RuleKeys.TextInvalidH3Position]: Severity;
+    [RuleKeys.GridTooMuchMarketingBlocks]: Severity;
 }
 
 export interface ExampleConfiguration {

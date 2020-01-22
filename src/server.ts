@@ -11,7 +11,7 @@ import {
 
 import { basename } from 'path';
 
-import { ExampleConfiguration, Severity, RuleKeys, RuleGroups } from './configuration';
+import { ExampleConfiguration, Severity, RuleKeys } from './configuration';
 
 require('./linter');
 
@@ -27,19 +27,41 @@ conn.onInitialize(() => {
     };
 });
 
+function GetRuleKey(code: string): RuleKeys | undefined {
+    switch (code) {
+        case 'WARNING.TEXT_SIZES_SHOULD_BE_EQUAL':
+            return RuleKeys.WarningTextSizesShouldBeEqual;
+        case 'WARNING.INVALID_BUTTON_SIZE':
+            return RuleKeys.WarningInvalidButtonSize;
+        case 'WARNING.INVALID_BUTTON_POSITION':
+            return RuleKeys.WarningInvalidButtonPosition;
+        case 'WARNING.INVALID_PLACEHOLDER_SIZE':
+            return RuleKeys.WarningInvalidPlaceholderSize;
+        case 'TEXT.SEVERAL_H1':
+            return RuleKeys.TextSeveralH1;
+        case 'TEXT.INVALID_H2_POSITION':
+            return RuleKeys.TextInvalidH2Position;
+        case 'TEXT.INVALID_H3_POSITION':
+            return RuleKeys.TextInvalidH3Position;
+        case 'GRID.TOO_MUCH_MARKETING_BLOCKS':
+            return RuleKeys.GridTooMuchMarketingBlocks;
+        default:
+            return undefined;
+    }
+}
+
 function GetSeverity(code: string): DiagnosticSeverity | undefined {
-    if (!conf || !conf.severity) {
+    const key: RuleKeys | undefined = GetRuleKey(code);
+
+    if (!conf || !conf.severity || !key) {
         return undefined;
     }
 
-    const splitCode = code.split('.');
-    const group: RuleGroups = splitCode[0] as RuleGroups;
-    const key: RuleKeys = splitCode[1] as RuleKeys;
-    const severity: Severity = conf.severity[group][key];
+    const severity: Severity = conf.severity[key];
 
     switch (severity) {
         case Severity.Error:
-            return DiagnosticSeverity.Information;
+            return DiagnosticSeverity.Error;
         case Severity.Warning:
             return DiagnosticSeverity.Warning;
         case Severity.Information:
